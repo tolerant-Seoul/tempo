@@ -738,7 +738,9 @@ mod tests {
         Arc,
         atomic::{AtomicUsize, Ordering},
     };
-    use tempo_chainspec::spec::{MODERATO, TEMPO_T0_BASE_FEE, TEMPO_T1_TX_GAS_LIMIT_CAP};
+    use tempo_chainspec::spec::{
+        MODERATO, TEMPO_T0_BASE_FEE, TEMPO_T1_BASE_FEE, TEMPO_T1_TX_GAS_LIMIT_CAP,
+    };
     use tempo_precompiles::{
         PATH_USD_ADDRESS,
         tip20::{TIP20Token, slots as tip20_slots},
@@ -1921,10 +1923,9 @@ mod tests {
             .unwrap()
             .as_secs();
 
-        // Create a transaction with max_fee_per_gas exactly at minimum
-        let active_fork = MODERATO.tempo_hardfork_at(current_time);
+        // Create a transaction with max_fee_per_gas exactly at the fixed T1+ minimum.
         let transaction = TxBuilder::aa(Address::random())
-            .max_fee(u128::from(active_fork.base_fee()))
+            .max_fee(u128::from(TEMPO_T1_BASE_FEE))
             .max_priority_fee(1_000_000_000)
             .build();
 

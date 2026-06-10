@@ -208,20 +208,6 @@ tempo_hardfork! (
 );
 
 impl TempoHardfork {
-    /// Returns the base fee for this hardfork in attodollars.
-    ///
-    /// Attodollars are the atomic gas accounting units at 10^-18 USD precision. Individual attodollars are not representable onchain (since TIP-20 tokens only have 6 decimals), but the unit is used for gas accounting.
-    /// - Pre-T1: 10 billion attodollars per gas
-    /// - T1+: 20 billion attodollars per gas (targets ~0.1 cent per TIP-20 transfer)
-    ///
-    /// Economic conversion: ceil(basefee × gas_used / 10^12) = cost in microdollars (TIP-20 tokens)
-    pub const fn base_fee(&self) -> u64 {
-        if self.is_t1() {
-            return gas::TEMPO_T1_BASE_FEE;
-        }
-        gas::TEMPO_T0_BASE_FEE
-    }
-
     /// Returns the fixed general gas limit for T1+, or None for pre-T1.
     /// - Pre-T1: None
     /// - T1+: 30M gas (fixed)
